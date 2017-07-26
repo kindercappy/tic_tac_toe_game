@@ -8,6 +8,16 @@ button {
   margin: .1rem;
 }
 
+.ticTacToe {
+  margin: 2rem 5rem;
+}
+
 .btn {
   border-radius: 0;
+}
+
+h1 {
+  position: absolute;
+  top: -500px;
+  left: 600px;
 }
