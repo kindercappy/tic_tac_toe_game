@@ -8,7 +8,8 @@ button {
   margin: .1rem;
 }
 
-.ticTacToe {
+.ticTacToe, .buttonContainer {
+  visibility: hidden;
   margin: 2rem 5rem;
 }
 
@@ -20,9 +21,4 @@ h1 {
   position: absolute;
   top: -500px;
   left: 600px;
-}
-
-button.chooseTypeGame {
-  width: 20%;
-  height: 100%;
 }

@@ -2,24 +2,18 @@ let game = [[],[],[]];
 let currSymUser;
 let currSymComp;
 let singlePlayer = true;
-let player1Score = 0;
-let player2Score = 0;
-let computerScore = 0;
 let buttonIds = {0:"zero",1:"first",2:"second",3:"third",4:"fourth",5:"fifth",6:"sixth",7:"seventh",8:"eighth"}
 let winnerPatterns = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
 let drawPattern = [0,1,2,3,4,5,6,7,8];
+let ticTacToeArea = '.ticTacToeArea';
+let buttonContainer = '.buttonContainer';
+let choiceContent = '.choiceContent';
 let X = ".X";
 let O = ".O";
-var gameObj = {0:"",
-				1:"",
-				2:"",
-				3:"",
-				4:"",
-				5:"",
-				6:"",
-				7:"",
-				8:""
-			}
+let h1 = "h1";
+let draw = "draw";
+let won = "won";
+var gameObj = {0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:""}
 function fadeOut(element){
 	$(element).fadeOut(500);
 }
@@ -36,55 +30,44 @@ function getRandomInt(min, max) {
 }
 //if there is a winner reset all the variable for next game
 function weHaveWinner(winner){	
-	$("h1").text("You win " + winner).animate({top:'500'},1000);
-	$('.ticTacToeArea').prop("disabled",true);
-	setTimeout(function() {
-		$("h1").animate({top:'-500'},500);
-		$('.ticTacToeArea').text("");
-		// $('.ticTacToeArea').prop("disabled",false);
-		// fadeIn('.X');
-		// fadeIn('.O');
-		showMe(X);
-		showMe(O);
-		// return;
-	}, 2000);
 	gameObj ={0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:""}
+	$(h1).text("You win " + winner).animate({top:'500'},1000);
+	$(ticTacToeArea).prop("disabled",true);
+	setTimeout(function() {
+		$(h1).animate({top:'-500'},500);
+		$(ticTacToeArea).text("");
+		$(O).css({visibility : 'visible'});
+		$(X).css({visibility : 'visible'});
+	}, 2000);
 	currSymUser = undefined;
 }
 function itWasADraw(){
-	$("h1").text("Its a Draw").animate({top:'500'},1000);
-	$('.ticTacToeArea').prop("disabled",true);
-	setTimeout(function() {
-		$("h1").animate({top:'-500'},500);
-		$('.ticTacToeArea').text("");
-		// $('.ticTacToeArea').prop("disabled",false);
-		// fadeIn('.X');
-		// fadeIn('.O');
-		showMe(X);
-		showMe(O);
-	}, 2000);
 	gameObj ={0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:""}
+	$(h1).text("Its a Draw").animate({top:'500'},1000);
+	$(ticTacToeArea).prop("disabled",true);
+	setTimeout(function() {
+		$(h1).animate({top:'-500'},500);
+		$(ticTacToeArea).text("");
+		$(O).css({visibility : 'visible'});
+		$(X).css({visibility : 'visible'});
+	}, 2000);
 	currSymUser = undefined;
-	// return;
 }
-function playCenter(gameObject){
-
-}
-function checkIfWonOrDraw2(gameObject){
-	let X = "X";
-	let O = "O";
+function checkIfWonOrDraw(gameObject){
+	let stringX = 'X';
+	let stringO = 'O';
 	if(gameObject[0] !== "" && gameObject[1] !== "" && gameObject[2] !== "" && gameObject[3] !== "" && gameObject[4] !== "" && gameObject[5] !== "" && gameObject[6] !== "" && gameObject[7] !== "" && gameObject[8] !== ""){
 			itWasADraw();
-			return;
+			return draw;
 	}
 	for(var i = 0; i < winnerPatterns.length; i+=1){
 		// get the winnerPatterns array and check if there are 2 values similar in every pattern and return winner
-		if(gameObject[winnerPatterns[i][0]] === X && gameObject[winnerPatterns[i][1]] === X  && gameObject[winnerPatterns[i][2]] === X){
-			weHaveWinner("X");
-			return;
-		}else if (gameObject[winnerPatterns[i][0]] === O && gameObject[winnerPatterns[i][1]] === O  && gameObject[winnerPatterns[i][2]] === O) {
-			weHaveWinner("O");
-			return;
+		if(gameObject[winnerPatterns[i][0]] === stringX && gameObject[winnerPatterns[i][1]] === stringX  && gameObject[winnerPatterns[i][2]] === stringX){
+			weHaveWinner(stringX);
+			return won;
+		}else if (gameObject[winnerPatterns[i][0]] === stringO && gameObject[winnerPatterns[i][1]] === stringO  && gameObject[winnerPatterns[i][2]] === stringO) {
+			weHaveWinner(stringO);
+			return won;
 		}
 	}
 }
@@ -100,21 +83,12 @@ function computerMoveDecided(move,iteration,index){
 		gameObj[winnerPatterns[iteration][index]] = currSymComp;
 		idToReturn = buttonIds[winnerPatterns[iteration][index]];
 	}else if (move === random) {
-		let count = 0;
-		// this will look for an empty random place and return that place or else will keep looping thru
-		// while (count === 0) {
-		// 	let randomInt = getRandomInt(0,8);
-		// 	if(gameObj[randomInt] === ""){
-		// 		idToReturn = buttonIds[randomInt];
-		// 		count += 1;
-		// 	}
-		// }
 		let numsLeft = drawPattern.reverse();
-		for(var i = 0; i < numsLeft.length; i+=1){
+		for(var i = 0; i < drawPattern.length; i+=1){
 			if(gameObj[drawPattern[i]] === ""){
-				idToReturn = buttonIds[numsLeft[i]];
+				gameObj[drawPattern[i]] = currSymComp;
+				idToReturn = buttonIds[drawPattern[i]];
 				break;
-				// count += 1;
 			}
 		}
 	}
@@ -153,59 +127,71 @@ function computerMove(objectProperty){
 		}
 	}
 	// this will return a random id
-	return computerMoveDecided(random);
+	var rand =  computerMoveDecided(random);
+	return rand;
 }
 $(document).ready(function(){
-
-// console.log(buttonIds[winnerPatterns[0][2]]);
-// console.log(gameObj[winnerPatterns[0][0]]);
-$('.ticTacToeArea').prop("disabled",true);
-let X = 'X';
-let O = 'O';
-		$('.X').on('click',function(){
-			if(!currSymUser){
-				currSymUser = $(this).text();
-				currSymComp = $('.O').text();
-				fadeOut(this);
-				fadeOut('.O');
-				$('.ticTacToeArea').prop("disabled",false);
-			}
-		});
-		$('.O').on('click',function(){
-			if(!currSymUser){
-				currSymUser = $(this).text();
-				currSymComp = $('.X').text();
-				fadeOut(this);
-				fadeOut('.X');
-				$('.ticTacToeArea').prop("disabled",false);
-			}
-		});
-	// On each button click get data-object will have gameObj prop and enter currValue into gameObj
-	$('.ticTacToeArea').on('click',function(){
+	let stringX = 'X';
+	let stringO = 'O';
+	$(ticTacToeArea).prop("disabled",true);
+	$(choiceContent).on('click',function(){
+		$(buttonContainer).css({visibility : 'visible'});
+		$(ticTacToeArea).css({visibility : 'visible'}).fadeIn(1500).prop("disabled",true);
+		$(this).fadeOut(500);
+	});
+			$(X).on('click',function(){
+				if(!currSymUser){
+					currSymUser = $(this).text();
+					currSymComp = $('.O').text();
+					$(O).css({visibility : 'hidden'});
+					$(ticTacToeArea).prop("disabled",false);
+				}
+			});
+			$(O).on('click',function(){
+				if(!currSymUser){
+					currSymUser = $(this).text();
+					currSymComp = $(X).text();
+					$(X).css({visibility : 'hidden'});
+					$(ticTacToeArea).prop("disabled",false);
+				}
+			});
+		// On each button click get data-object will have gameObj prop and enter currValue into gameObj
+	$(ticTacToeArea).on('click',function(){
 		if (singlePlayer) {
-
-			if($(this).text() !== X && $(this).text() !== O){
-
+			if($(this).text() !== stringX && $(this).text() !== stringO){
 				// get the current button id so it can be deleted from the compRandom object so the computer doesnt insert its value on which the user just clicked
 				$(this).text(currSymUser);
 				//get the data-object attribute number so we can insert the user symbol into the gameObj
 				var objProp = $(this).data('object');
 				gameObj[objProp] = currSymUser;
+				var wonOrDraw = checkIfWonOrDraw(gameObj);
+				// if the user wins the retur before entering the computer's move
+				if(wonOrDraw === won){
+					// console.log(gameObj);
+					checkIfWonOrDraw(gameObj);
+					console.log(gameObj);
+					return;
+				} else if (wonOrDraw === draw) {
+					checkIfWonOrDraw(gameObj);
+					console.log(gameObj);
+					return;
+				}
 				//to set the computer move
 				let idToDisplay = "#";
 				idToDisplay += computerMove(objProp);
+				
 				$(idToDisplay).text(currSymComp);
-				checkIfWonOrDraw2(gameObj);
+				checkIfWonOrDraw(gameObj);
+				console.log(gameObj);	 
 			}
 		}else {
-			if($(this).text() !== X && $(this).text() !== O){
-
+			if($(this).text() !== stringX && $(this).text() !== stringO){
 				// get the current button id so it can be deleted from the compRandom object so the computer doesnt insert its value on which the user just clicked
 				$(this).text(currSymUser);
 				//get the data-object attribute number so we can insert the user symbol into the gameObj
 				var objProp = $(this).data('object');
 				gameObj[objProp] = currSymUser;
-				checkIfWonOrDraw2(gameObj);
+				checkIfWonOrDraw(gameObj);
 				if(currSymUser === "X"){
 					currSymUser = "O";
 				} else if(currSymUser === "O"){
