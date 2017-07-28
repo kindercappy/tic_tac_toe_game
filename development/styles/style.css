@@ -1,4 +1,5 @@
 body {
+  min-width: 335px;
   background-color: green;
 }
 
@@ -10,7 +11,11 @@ button {
 
 .ticTacToe, .buttonContainer {
   visibility: hidden;
-  margin: 2rem 5rem;
+  margin: 0 auto;
+}
+
+.ticTacToeArea {
+  font-size: .1rem;
 }
 
 .btn {
@@ -20,5 +25,40 @@ button {
 h1 {
   position: absolute;
   top: -500px;
-  left: 600px;
+}
+
+.computerThinking {
+  display: none;
+}
+
+.singleDoubleContainer {
+  margin: 0 auto;
+}
+
+.computerSymbol {
+  visibility: hidden;
+}
+
+@media (max-width: 576px) {
+  h1 {
+    font-size: 1.5rem;
+    left: 100px;
+  }
+
+  h2 {
+    font-size: 1rem;
+  }
+
+  .ticTacToe, .buttonContainer {
+    margin: auto 5rem;
+  }
+
+  .choiceContent h2 {
+    font-size: 1rem;
+  }
+}
+@media (min-width: 577px) and (max-width: 767px) {
+  .ticTacToe, .buttonContainer {
+    margin: 2rem 13rem;
+  }
 }
