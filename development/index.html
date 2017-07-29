@@ -7,10 +7,27 @@
 </head>
 <body>
 
-<div class="buttonContainer"><h3 class="userSymbol">Choose</h3><button class="X btn">X</button><button class="O btn">O</button><h3 class="computerSymbol">Computer is</h3></div>
+<div class="buttonContainer">
+	<div class="row">
+	<div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+		<h3 class="userSymbol mr-5 text-center">Choose</h3>
+	</div>
+	<div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+		<h3 class="userSymbol text-center playerTwo">Player Two</h3>
+	</div>
+	</div>
+	<div class="container-fluid">
+		<div class="row">
+			<button class="X btn">X</button>
+			<button class="O btn">O</button>
+			<div class="arrow">&#8592;</div>
+		</div>
+	</div>
+	<h3 class="computerSymbol text-center">Computer is</h3>
+</div>
 
 
-<div class="ticTacToe">
+<div class="ticTacToe text-center">
 	<div class="container-fluid">
 		<div class="row">
 
@@ -41,16 +58,14 @@
 </div>
 
 <h2 class="computerThinking text-center"></h2>
-<h1>
-	Tic Tac Toe
-</h1>
+<h1>Tic Tac Toe</h1>
 <!-- Single Player or Double Player? -->
 <div class="container-fluid choiceContent">
 	<div class="row">
-		<h2 class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-8">Single Player or Double Player?</h2>
-		<div class="row col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 singleDoubleContainer">
-			<button class="btn col-5 col-sm-5 col-md-6 col-lg-6 col-xl-3 chooseTypeGameSingle">Single</button>
-			<button class="btn col-5 col-sm-5 col-md-6 col-lg-6 col-xl-3 chooseTypeGameDouble">Double</button>
+		<h2 class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-5">Single Player or Double Player?</h2>
+		<div class="row col-12 col-sm-12 col-md-12 col-lg-12 col-xl-7 singleDoubleContainer">
+			<button class="btn col-5 col-sm-5 col-md-4 col-lg-4 col-xl-5 chooseTypeGameSingle">Single</button>
+			<button class="btn col-5 col-sm-5 col-md-4 col-lg-4 col-xl-5 chooseTypeGameDouble">Double</button>
 		</div>
 	</div>
 </div>

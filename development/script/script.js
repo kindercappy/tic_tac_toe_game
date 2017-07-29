@@ -1,4 +1,3 @@
-let game = [[],[],[]];
 let currSymUser;
 let currSymComp;
 let singlePlayer = true;
@@ -11,10 +10,8 @@ let O = ".O";
 let h1 = "h1";
 let draw = "draw";
 let won = "won";
-let ticTacToeArea = '.ticTacToeArea';
-let buttonContainer = '.buttonContainer';
-let computerThinking = ".computerThinking"
-let choiceContent = '.choiceContent';
+let userSymbol = ".userSymbol";
+let computerSymbol = ".computerSymbol";
 function fadeOut(element){
 	$(element).fadeOut(500);
 }
@@ -30,59 +27,78 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
 function lowerOpatictyWhenResultShown(){
+	let choiceContent = '.choiceContent';
+	let computerThinking = ".computerThinking";
+	let buttonContainer = '.buttonContainer';
 	$(buttonContainer).css({opacity : '0.5'});
-	// $(ticTacToeArea).css({opacity : '0.5'});
 	$(computerThinking).css({opacity : '0.5'});
 	$(choiceContent).css({opacity : '0.5'});
 }
 function fullOpacityAfterResult(){
+	let choiceContent = '.choiceContent';
+	let computerThinking = ".computerThinking";
+	let buttonContainer = '.buttonContainer';
 	$(buttonContainer).css({opacity : '1'});
-	// $(ticTacToeArea).css({opacity : '1'});
 	$(computerThinking).css({opacity : '1'});
 	$(choiceContent).css({opacity : '1'});
 }
-//if there is a winner reset all the variable for next game
-function weHaveWinner(winner){
+function afterResultBeforeTimeOut(){
+	let computerThinking = ".computerThinking";
+	let ticTacToeArea = '.ticTacToeArea';
 	lowerOpatictyWhenResultShown();
-	if (singlePlayer) {
-		if (winner === currSymUser) {
-			$(h1).text("You're the Man or Woman " + winner).animate({top:'300'},1000);
-		}else if (winner === currSymComp) {
-			$(h1).text("I'm the boss").animate({top:'300'},1000);
-		}
-	}else{
-		$(h1).text("You win " + winner).animate({top:'300'},1000);
-	}
 	gameObj ={0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:""}
 	$(ticTacToeArea).prop("disabled",true);
 	$(computerThinking).text("");
+	$(computerSymbol).css({visibility:'hidden'});
+	$(userSymbol).text("Choose");
+}
+function afterResultTimeOut(){
+	let ticTacToeArea = '.ticTacToeArea';
+	let arrow = '.arrow';
+	$(h1).animate({top:'-500'},500);
+	$(ticTacToeArea).text("");
+	$(O).css({visibility : 'visible'});
+	$(X).css({visibility : 'visible'});
+	$(arrow).animate({opacity : '1'},500);
+	fullOpacityAfterResult();
+}
+function winOrDrawMessages(str){
+	let popup = 400;
+	$(h1).text(str).animate({top:popup},1000);
+}
+//if there is a winner reset all the variable for next game
+function weHaveWinner(winner){
+	let whoseTheBoss = ["You're the boss ","I'm the boss","You win "];
+	let whoWon = whoseTheBoss[0] + " " + winner;
+	let youWin = whoseTheBoss[2] + " " + winner;
+	if (singlePlayer) {
+		if (winner === currSymUser) {
+			winOrDrawMessages(whoWon);
+		}else if (winner === currSymComp) {
+			winOrDrawMessages(whoseTheBoss[1]);
+		}
+	}else{
+		winOrDrawMessages(youWin);
+	}
+	afterResultBeforeTimeOut();
 	setTimeout(function() {
-		$(h1).animate({top:'-500'},500);
-		$(ticTacToeArea).text("");
-		$(O).css({visibility : 'visible'});
-		$(X).css({visibility : 'visible'});
-		fullOpacityAfterResult();
-		// $(ticTacToeArea).css({fontSize:'.1rem'});
+		afterResultTimeOut();
+		$('.playerTwo').css({visibility : 'hidden'});
 	}, 2000);
 	currSymUser = undefined;
 }
 function itWasADraw(){
-	lowerOpatictyWhenResultShown();
+	let matchDraw = ["I like competition","It's a draw"]
 	if (singlePlayer) {
-		$(h1).text("I like competition").animate({top:'300'},1000);
+		winOrDrawMessages(matchDraw[0]);
 	}else {
-		$(h1).text("It's a draw").animate({top:'300'},1000);
+		winOrDrawMessages(matchDraw[1]);
+		
 	}
-	gameObj ={0:"",1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:""}
-	$(ticTacToeArea).prop("disabled",true);
-	$(computerThinking).text("");
+	afterResultBeforeTimeOut();
 	setTimeout(function() {
-		$(h1).animate({top:'-500'},500);
-		$(ticTacToeArea).text("");
-		$(O).css({visibility : 'visible'});
-		$(X).css({visibility : 'visible'});
-		fullOpacityAfterResult();
-		// $(ticTacToeArea).css({fontSize:'.1rem'});
+		afterResultTimeOut();
+		$('.playerTwo').css({visibility : 'hidden'});
 	}, 2000);
 	currSymUser = undefined;
 }
@@ -144,11 +160,11 @@ function computerMove(objectProperty){
 	// this will check if the 2 computer symbols are set so with the third move the computer will win, this will make the computer win
 	for(var i = 0; i < winnerPatterns.length; i+=1 ){
 		if(gameObj[winnerPatterns[i][0]] === currSymComp && gameObj[winnerPatterns[i][1]] === currSymComp && gameObj[winnerPatterns[i][2]] === ""){
-			return computerMoveDecided(block,i,2);
+			return computerMoveDecided(goWin,i,2);
 		}else if (gameObj[winnerPatterns[i][0]] === currSymComp && gameObj[winnerPatterns[i][1]] === "" && gameObj[winnerPatterns[i][2]] === currSymComp ) {
-			return computerMoveDecided(block,i,1);
+			return computerMoveDecided(goWin,i,1);
 		}else if (gameObj[winnerPatterns[i][0]] === "" &&  gameObj[winnerPatterns[i][1]] === currSymComp && gameObj[winnerPatterns[i][2]] === currSymComp ) {
-			return computerMoveDecided(block,i,0);
+			return computerMoveDecided(goWin,i,0);
 		}
 	}
 	// this will check if the user has 2 symbols with which the 2rd symbol will win the game for the user, this will block that move
@@ -165,69 +181,88 @@ function computerMove(objectProperty){
 	var rand =  computerMoveDecided(random);
 	return rand;
 }
+// will display computer's symbol when user chooses its symbol
+function computerMessageShow(btnToHide){
+	$(computerSymbol).css({opacity:'.1'});
+	$(computerSymbol).text('Computer is ' + currSymComp);
+	$(computerSymbol).css({visibility:'visible'});
+	$(btnToHide).css({visibility : 'hidden'});
+	$(computerSymbol).animate({opacity:'1'},500);
+}
+// will display user's symbol when user chooses its symbol
+function userMessageShow(){
+	let arrow = '.arrow';
+	let ticTacToeArea = '.ticTacToeArea';
+	$(userSymbol).css({opacity:'.1'});
+	if(!singlePlayer){
+		$(userSymbol).text('Player One: ' + currSymUser);
+	}else {
+		$(userSymbol).text('You chose ' + currSymUser);
+	}
+	$(userSymbol).animate({opacity:'1'},500);
+	$(arrow).animate({opacity : '0'},500);
+	$(ticTacToeArea).prop("disabled",false);
+}
+function hideGameTypeOption(){
+	let choiceContent = '.choiceContent';
+	let buttonContainer = '.buttonContainer';
+	let ticTacToeArea = '.ticTacToeArea';
+	$(buttonContainer).css({visibility : 'visible'});
+	$(ticTacToeArea).css({visibility : 'visible'}).fadeIn(1500).prop("disabled",true);
+	$(choiceContent).fadeOut(500);
+}
 $(document).ready(function(){
 	let chooseTypeGameSingle = ".chooseTypeGameSingle";
 	let chooseTypeGameDouble = ".chooseTypeGameDouble";
-	let userSymbol = ".userSymbol";
-	let computerSymbol = ".computerSymbol";
 	let stringX = 'X';
 	let stringO = 'O';
 	let draw = "draw";
 	let won = "won";
-	let computerLetsSee = "Let's see what you got";
 	let computerLetMeThink = "Ok Let Me Think...";
-	let computerTalks = ["Hah I got this..","Hmmm...let me think...","Intelligent move..."]
+	let computerTalks = ["Hah I got this..","Hmmm...let me think...","Intelligent move...","Let's see what you got"];
+	let computerThinking = ".computerThinking";
+	let ticTacToeArea = '.ticTacToeArea';
 	$(ticTacToeArea).prop("disabled",true);
 	$(chooseTypeGameSingle).on('click',function(){
-		$(buttonContainer).css({visibility : 'visible'});
-		$(ticTacToeArea).css({visibility : 'visible'}).fadeIn(1500).prop("disabled",true);
-		$(choiceContent).fadeOut(500);
+		hideGameTypeOption();
 		singlePlayer = true;
 	});
 	$(chooseTypeGameDouble).on('click',function(){
-		$(buttonContainer).css({visibility : 'visible'});
-		$(ticTacToeArea).css({visibility : 'visible'}).fadeIn(1500).prop("disabled",true);
-		$(choiceContent).fadeOut(500);
+		hideGameTypeOption();
+		// $('.playerTwo').fadeIn(500);
+		
 		singlePlayer = false;
 	});
 	$(X).on('click',function(){
 		if(!currSymUser){
-			$(userSymbol).css({opacity:'.1'});
 			currSymUser = $(this).text();
-			$(userSymbol).text('You chose ' + currSymUser);
-			$(userSymbol).animate({opacity:'1'},500);
-			$(ticTacToeArea).prop("disabled",false);
+			userMessageShow();
 			//check if the user selected to play a double player game or dpuble and show buttons accordingly
 			if (!singlePlayer) {
-				$(O).css({visibility : 'visible'});
+				$('.playerTwo').fadeIn(200);
+				$('.playerTwo').text("Player Two: O");
+				$(O).css({visibility : 'hidden'});
+				$(X).css({visibility : 'hidden'});
 				return;
 			}
-			$(computerSymbol).css({opacity:'.1'});
 			currSymComp = $(O).text();
-			$(computerSymbol).text('Computer is ' + currSymComp);
-			$(computerSymbol).css({visibility:'visible'})
-			$(computerSymbol).animate({opacity:'1'},500);
-			$(O).css({visibility : 'hidden'});
+			computerMessageShow(O);
 		}
 	});
 	$(O).on('click',function(){
 		if(!currSymUser){
-			$(userSymbol).css({opacity:'.1'});
 			currSymUser = $(this).text();
-			$(userSymbol).text('You chose ' + currSymUser);
-			$(userSymbol).animate({opacity:'1'},500);
-			$(ticTacToeArea).prop("disabled",false);
-			//check if the user selected to play a double player game or dpuble and show buttons accordingly
+			userMessageShow();
 			if (!singlePlayer) {
-				$(X).css({visibility : 'visible'});
+				$('.playerTwo').fadeIn(200);
+				$('.playerTwo').text("Player Two: X");
+				$(X).css({visibility : 'hidden'});
+				$(O).css({visibility : 'hidden'});
 				return;
 			}
-			$(computerSymbol).css({opacity:'.1'});
+			//check if the user selected to play a double player game or dpuble and show buttons accordingly
 			currSymComp = $(X).text();
-			$(computerSymbol).text('Computer is ' + currSymComp);
-			$(computerSymbol).css({visibility:'visible'})
-			$(computerSymbol).animate({opacity:'1'},500);
-			$(X).css({visibility : 'hidden'});
+			computerMessageShow(X);
 		}
 	});
 		// On each button click get data-object will have gameObj prop and enter currValue into gameObj
@@ -251,7 +286,6 @@ $(document).ready(function(){
 				}
 				let time = getRandomInt(5,20);
 				let fadeInTime = Number(time + "00");
-				console.log(fadeInTime);
 				if (time <= 10){
 					computerLetMeThink = computerTalks[0];
 				}else if (time > 10 && time <= 5) {
@@ -263,7 +297,7 @@ $(document).ready(function(){
 				$(ticTacToeArea).prop("disabled",true);
 				//to set the computer move
 				setTimeout(function() {
-					$(computerThinking).text(computerLetsSee);
+					$(computerThinking).text(computerTalks[3]);
 					$(ticTacToeArea).prop("disabled",false);
 					let idToDisplay = "#";
 					idToDisplay += computerMove(objProp);
@@ -281,6 +315,7 @@ $(document).ready(function(){
 				var objProp = $(this).data('object');
 				gameObj[objProp] = currSymUser;
 				checkIfWonOrDraw(gameObj);
+				// this will reverse the current user symbol for double player game
 				if(currSymUser === "X"){
 					currSymUser = "O";
 				} else if(currSymUser === "O"){
