@@ -1,8 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Old+Standard+TT');
 body{
 	min-width:335px;
-	// background-color: green;
 	font-family: 'Old Standard TT', serif;
+	padding:1rem;
+	// background-image: linear-gradient(to right, #ff8177 0%, #ff867a 0%, #ff8c7f 21%, #f99185 52%, #cf556c 78%, #b12a5b 100%);
+	background-image: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+}
+.wrapper{
+	width: 50%;
+	margin: 0 auto;
 }
 .ticTacToe,.buttonContainer{
 	visibility: hidden;
@@ -11,7 +17,8 @@ body{
 }
 .ticTacToeArea{
 	font-size: .1rem;
-	// width: 50px;
+	width: 60px;
+	height: 60px;
 	// border: 1px solid black;
 	border-radius: 0;
 	background-color: black;
@@ -21,11 +28,19 @@ body{
 		color: black;
 	}
 }
-h1{
+.popup{
 	position: absolute;
 	top: -500px;
-	width: 50%;
+	width: 220px;
 	margin: 0 auto;
+	font-size: 2rem;
+	// animation: glowMagenta 800ms ease-out infinite alternate;
+	border: 1px solid #444;
+	left: 0;
+	padding: .5rem;
+	// bottom: 0;
+	right: 0;
+	// color: #8b4513;
 	// left: 0;
 }
 .computerThinking{
@@ -41,15 +56,13 @@ h1{
 	padding: .5rem;
 	animation: glow 800ms ease-out infinite alternate;
 	border: 1px solid #444;
-	width: 200px;
+	width: 220px;
 	margin-top: .5rem;
 }
-.popUpText{
-	margin: 0 auto;
-}
+
 button{
-	height: 48px;
-	width: 48px;
+	// height: 60px;
+	// width: 60px;
 	margin: .1rem;
 	&:hover:enabled{
 		background-color: darkslategrey;
@@ -61,7 +74,7 @@ button{
 	animation: glowRed 800ms ease-out infinite alternate;
 	border: 1px solid #444;
 	padding: .5rem;
-	width: 200px;
+	width: 220px;
 }
 .arrow{
     width: 40px;
@@ -76,6 +89,17 @@ button{
 .buttonContainer{
 	width: 50%;
 }
+.X,.O{
+	width: 60px;
+	height: 60px;
+	font-size: 1.5rem;
+}
+.choiceContent{
+	position: absolute;
+	top: 100px;
+	left: 0;
+	right: 0;
+}
 @-webkit-keyframes bounce {
 	0%, 20%, 60%, 100%  { -webkit-transform: translateX(0); }
     40%  { -webkit-transform: translateX(20px); }
@@ -83,10 +107,16 @@ button{
 }
 //col-
 @media (max-width: 576px){
-	h1{
-		font-size: 1.5rem;
+	.wrapper{
+		width: 100%;
+		margin: 0 auto;
 	}
-	.choiceContent h2{
+	.X,.O{
+		width: 48px;
+		height: 48px;
+		font-size: 1rem;
+	}
+	.popup{
 		font-size: 1.5rem;
 	}
 	h3{
@@ -95,50 +125,44 @@ button{
 	.computerThinking{
 		font-size: 1rem;
 	}
-	.ticTacToe,.buttonContainer{
+	.ticTacToeArea{
+		width: 47px;
+		height: 47px;
 	}
 }
 //col-sm
 @media (min-width: 577px) and (max-width: 767px){
-	.computerThinking{
+	// .choiceContent h2{
+	// 	font-size: 1.5rem;
+	// }
+	.wrapper{
+		width: 100%;
+		margin: 0 auto;
 	}
-	.choiceContent h2{
-		font-size: 1.5rem;
-	}
-	h1{
-		font-size: 1.2rem;
-	}
-	.ticTacToe,.buttonContainer{
+	.popup{
+		font-size: 2rem;
 	}
 }
 //col-md
 @media (min-width: 768px) and (max-width: 991px){
-	.computerThinking{
+	.wrapper{
+		width: 100%;
+		margin: 0 auto;
 	}
-	h1{
+	.popup{
 		font-size: 1.5rem;
-	}
-	.ticTacToe,.buttonContainer{
 	}
 }
 //col-lg
 @media (min-width: 992px) and (max-width: 1199px){
-	.computerThinking{
-	}
-	h1{
+	.popup{
 		font-size: 1.5rem;
-	}
-	.ticTacToe,.buttonContainer{
 	}
 }
 //col-xl
 @media (min-width: 1200px){
-	.computerThinking{
-	}
-	h1{
-		font-size: 1.5rem;
-	}
-	.ticTacToe,.buttonContainer{
+	.popup{
+		// font-size: 1.5rem;
 	}
 }
 @keyframes glow {
@@ -154,10 +178,20 @@ button{
 @keyframes glowRed {
     0% {
     border-color: red;
-    box-shadow: 0 0 1px rgba(139,0,0,.1), inset 0 0 1px rgba(139,0,0,.1);
+    box-shadow: 0 0 5px rgba(139,0,0,.1), inset 0 0 5px rgba(139,0,0,.1);
     } 
     100% {
     border-color: red;
-    box-shadow: 0 0 2px red, inset 0 0 2px red;
+    box-shadow: 0 0 20px rgba(139,0,0,1), inset 0 0 10px rgba(139,0,0,1);
+    }
+}
+@keyframes glowMagenta {
+    0% {
+    border-color: red;
+    box-shadow: 0 0 5px rgba(139,0,139,.1), inset 0 0 5px rgba(139,0,139,.1);
+    } 
+    100% {
+    border-color: red;
+    box-shadow: 0 0 20px rgba(139,0,139,1), inset 0 0 10px rgba(139,0,139,1);
     }
 }

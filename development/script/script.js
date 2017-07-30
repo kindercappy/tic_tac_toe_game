@@ -51,12 +51,13 @@ function afterResultBeforeTimeOut(){
 	$(computerThinking).text("");
 	$(computerSymbol).css({visibility:'hidden'});
 	$(userSymbol).text("Choose");
+	$('.playerTwo').hide();
 }
 function afterResultTimeOut(){
 	let ticTacToeArea = '.ticTacToeArea';
 	let arrow = '.arrow';
 	$(h1).animate({top:'-500'},500);
-	$(ticTacToeArea).text("");
+	$(ticTacToeArea).text("").css({fontSize : '.1rem'});
 	$(O).css({visibility : 'visible'});
 	$(X).css({visibility : 'visible'});
 	$(arrow).animate({opacity : '1'},500);
@@ -83,7 +84,7 @@ function weHaveWinner(winner){
 	afterResultBeforeTimeOut();
 	setTimeout(function() {
 		afterResultTimeOut();
-		$('.playerTwo').css({visibility : 'hidden'});
+		// $('.playerTwo').css({visibility : 'hidden'});
 	}, 2000);
 	currSymUser = undefined;
 }
@@ -98,7 +99,7 @@ function itWasADraw(){
 	afterResultBeforeTimeOut();
 	setTimeout(function() {
 		afterResultTimeOut();
-		$('.playerTwo').css({visibility : 'hidden'});
+		// $('.playerTwo').css({visibility : 'hidden'});
 	}, 2000);
 	currSymUser = undefined;
 }
@@ -184,7 +185,7 @@ function computerMove(objectProperty){
 // will display computer's symbol when user chooses its symbol
 function computerMessageShow(btnToHide){
 	$(computerSymbol).css({opacity:'.1'});
-	$(computerSymbol).text('Computer is ' + currSymComp);
+	$(computerSymbol).text('Computer is: ' + currSymComp);
 	$(computerSymbol).css({visibility:'visible'});
 	$(btnToHide).css({visibility : 'hidden'});
 	$(computerSymbol).animate({opacity:'1'},500);
@@ -197,7 +198,7 @@ function userMessageShow(){
 	if(!singlePlayer){
 		$(userSymbol).text('Player One: ' + currSymUser);
 	}else {
-		$(userSymbol).text('You chose ' + currSymUser);
+		$(userSymbol).text('You chose: ' + currSymUser);
 	}
 	$(userSymbol).animate({opacity:'1'},500);
 	$(arrow).animate({opacity : '0'},500);
@@ -209,7 +210,7 @@ function hideGameTypeOption(){
 	let ticTacToeArea = '.ticTacToeArea';
 	$(buttonContainer).css({visibility : 'visible'});
 	$(ticTacToeArea).css({visibility : 'visible'}).fadeIn(1500).prop("disabled",true);
-	$(choiceContent).fadeOut(500);
+	$(choiceContent).animate({top:'-500'},1000);
 }
 $(document).ready(function(){
 	let chooseTypeGameSingle = ".chooseTypeGameSingle";
@@ -229,8 +230,7 @@ $(document).ready(function(){
 	});
 	$(chooseTypeGameDouble).on('click',function(){
 		hideGameTypeOption();
-		// $('.playerTwo').fadeIn(500);
-		
+		$(computerSymbol).css({display:'none'});	
 		singlePlayer = false;
 	});
 	$(X).on('click',function(){
@@ -239,6 +239,7 @@ $(document).ready(function(){
 			userMessageShow();
 			//check if the user selected to play a double player game or dpuble and show buttons accordingly
 			if (!singlePlayer) {
+				// $(computerSymbol).css({display:'none'});
 				$('.playerTwo').fadeIn(200);
 				$('.playerTwo').text("Player Two: O");
 				$(O).css({visibility : 'hidden'});
@@ -254,6 +255,7 @@ $(document).ready(function(){
 			currSymUser = $(this).text();
 			userMessageShow();
 			if (!singlePlayer) {
+				
 				$('.playerTwo').fadeIn(200);
 				$('.playerTwo').text("Player Two: X");
 				$(X).css({visibility : 'hidden'});
@@ -271,7 +273,7 @@ $(document).ready(function(){
 			if($(this).text() !== stringX && $(this).text() !== stringO){
 				// get the current button id so it can be deleted from the compRandom object so the computer doesnt insert its value on which the user just clicked
 				$(this).text(currSymUser);
-				$(this).animate({fontSize:'1.3rem'},10);
+				$(this).animate({fontSize:'1.5rem'},10);
 				//get the data-object attribute number so we can insert the user symbol into the gameObj
 				var objProp = $(this).data('object');
 				gameObj[objProp] = currSymUser;
@@ -302,14 +304,14 @@ $(document).ready(function(){
 					let idToDisplay = "#";
 					idToDisplay += computerMove(objProp);
 					$(idToDisplay).text(currSymComp);
-					$(idToDisplay).animate({fontSize:'1.3rem'},10);
+					$(idToDisplay).animate({fontSize:'1.5rem'},10);
 					checkIfWonOrDraw(gameObj);
 				}, fadeInTime);
 			}
 		}else {
 			if($(this).text() !== stringX && $(this).text() !== stringO){
 				// get the current button id so it can be deleted from the compRandom object so the computer doesnt insert its value on which the user just clicked
-				$(this).animate({fontSize:'1.3rem'},200);
+				$(this).animate({fontSize:'1.5rem'},200);
 				$(this).text(currSymUser);
 				//get the data-object attribute number so we can insert the user symbol into the gameObj
 				var objProp = $(this).data('object');
