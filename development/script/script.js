@@ -108,10 +108,6 @@ function checkIfWonOrDraw(gameObject){
 	let stringO = 'O';
 	let draw = "draw";
 	let won = "won";
-	if(gameObject[0] !== "" && gameObject[1] !== "" && gameObject[2] !== "" && gameObject[3] !== "" && gameObject[4] !== "" && gameObject[5] !== "" && gameObject[6] !== "" && gameObject[7] !== "" && gameObject[8] !== ""){
-			itWasADraw();
-			return draw;
-	}
 	for(var i = 0; i < winnerPatterns.length; i+=1){
 		// get the winnerPatterns array and check if there are 2 values similar in every pattern and return winner
 		if(gameObject[winnerPatterns[i][0]] === stringX && gameObject[winnerPatterns[i][1]] === stringX  && gameObject[winnerPatterns[i][2]] === stringX){
@@ -121,6 +117,10 @@ function checkIfWonOrDraw(gameObject){
 			weHaveWinner(stringO);
 			return won;
 		}
+	}
+	if(gameObject[0] !== "" && gameObject[1] !== "" && gameObject[2] !== "" && gameObject[3] !== "" && gameObject[4] !== "" && gameObject[5] !== "" && gameObject[6] !== "" && gameObject[7] !== "" && gameObject[8] !== ""){
+			itWasADraw();
+			return draw;
 	}
 }
 function computerMoveDecided(move,iteration,index){
@@ -311,12 +311,19 @@ $(document).ready(function(){
 		}else {
 			if($(this).text() !== stringX && $(this).text() !== stringO){
 				// get the current button id so it can be deleted from the compRandom object so the computer doesnt insert its value on which the user just clicked
-				$(this).animate({fontSize:'1.5rem'},200);
 				$(this).text(currSymUser);
+				$(this).animate({fontSize:'1.5rem'},10);
 				//get the data-object attribute number so we can insert the user symbol into the gameObj
 				var objProp = $(this).data('object');
 				gameObj[objProp] = currSymUser;
-				checkIfWonOrDraw(gameObj);
+				var winOrLoose = checkIfWonOrDraw(gameObj);
+				if(winOrLoose === won){
+					checkIfWonOrDraw(gameObj);
+					return;
+				} else if (wonOrDraw === draw) {
+					checkIfWonOrDraw(gameObj);
+					return;
+				}
 				// this will reverse the current user symbol for double player game
 				if(currSymUser === "X"){
 					currSymUser = "O";

@@ -31,17 +31,13 @@ body{
 .popup{
 	position: absolute;
 	top: -500px;
-	width: 220px;
+	width: 300px;
 	margin: 0 auto;
 	font-size: 2rem;
-	// animation: glowMagenta 800ms ease-out infinite alternate;
 	border: 1px solid #444;
 	left: 0;
 	padding: .5rem;
-	// bottom: 0;
 	right: 0;
-	// color: #8b4513;
-	// left: 0;
 }
 .computerThinking{
 	margin-top: .5rem;
@@ -67,6 +63,7 @@ button{
 	&:hover:enabled{
 		background-color: darkslategrey;
 		color: white;
+		cursor: pointer;
 	}
 }
 .userSymbol{
